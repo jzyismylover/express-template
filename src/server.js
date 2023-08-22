@@ -19,7 +19,7 @@ redisClient.on("connect", () => {
 redisClient.on("error", (e) => {
   console.error(e);
 });
-redisClient.connect()
+redisClient.connect();
 
 // 请求大小限制
 const requestLimit = "5120kb";
@@ -68,7 +68,7 @@ class ExpressServer {
         httpOnly: true,
       },
     };
-    
+
     this.app.use(expressSession(sessionOptions));
     this.server = http.createServer(this.app);
   }
@@ -105,6 +105,7 @@ class ExpressServer {
           result = {
             code: e.code,
             message: e.message,
+            status: e.status,
             data: null,
           };
         } else {
@@ -121,7 +122,9 @@ class ExpressServer {
           e
         );
       }
-      res.send(result);
+
+      const status = result.code === 0 ? (method === "post" ? 201 : 200) : 400;
+      res.status(status).send(result);
     };
 
     this.app[method](this.contextPath + path, handler);

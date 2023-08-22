@@ -18,7 +18,7 @@ const SALT = "%EXPRESS%";
 async function getLoginUser(req) {
   const { userInfo } = req.session;
   if (!userInfo?.id) {
-    throw new MyError(NO_AUTH_ERROR_CODE, "未登陆");
+    throw new MyError(NO_AUTH_ERROR_CODE, "未登陆", 401);
   }
   const currentUser = await UserModel.findByPk(userInfo.id);
   if (!currentUser) {

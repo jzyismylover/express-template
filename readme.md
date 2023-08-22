@@ -176,6 +176,26 @@ redisClient.on('error', () => {})
 
 
 
+## exception
+
+> 自定义错误处理及对应状态码
+
+```js
+class ExpressError extends Error {
+    constructor(code, msg, status = 400) {
+        super(msg)
+        this.code = code
+        this.msg = msg
+        this.status = status // http状态码
+        this.name = 'ExpressError'
+    }
+}
+```
+
+基于上面自定义的错误，可以在其他地方使用来抛出异常，然后在全局捕获。为什么要重新定义一个 `Error` 对象？原生的 `Error` 不包含 `code` 、`status` 等信息`，相对使用比较局限 —— **抛出的错误不好定义错误类型**。
+
+
+
 ## controller
 
 > 控制器，后端注册 `api`
